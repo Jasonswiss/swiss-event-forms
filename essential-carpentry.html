@@ -304,7 +304,7 @@ const CATALOGUE={
   wardrobe_sliding:{name:'Wardrobe — Sliding',min:5,base:270,extra:300},
   vanity_top:{name:'Top Vanity Cabinet',min:3,base:120,extra:180},
   vanity_bottom:{name:'Bottom Vanity Cabinet',min:3,base:200,extra:240},
-  vanity_bottom_hbb:{name:'Bottom Vanity Cabinet + HBB Sink',min:3,base:200,extra:240,topup:800,bonus:'HBB sink top-up: +$800 (included in price, T&C applies)'},
+  vanity_bottom_hbb:{name:'Bottom Vanity Cabinet + HBB Sink',min:3,base:200,extra:240,topup:800,topupSave:600,bonus:'HBB sink top-up: +$800 (worth $1,400 — save $600, T&C applies)'},
 };
 const ROOMS=[
   {id:'kitchen',section:'sec-kitchen',label:'Kitchen',flat:true,items:['kitchen','kitchen_sintered']},
@@ -323,7 +323,7 @@ ROOMS.forEach(r=>{state[r.id]={};r.items.forEach(t=>{state[r.id][t]={checked:fal
 
 function uid(r,t){return r+'__'+t;}
 function calcPrice(c,ft){if(!ft||ft<=0)return 0;const b=c.base*c.min;const p=ft<=c.min?b:b+(ft-c.min)*c.extra;return p+(c.topup||0);}
-function savings(c){return(c.extra-c.base)*c.min;}
+function savings(c){return(c.extra-c.base)*c.min+(c.topupSave||0);}
 function fmt(n){return'$'+Math.round(n).toLocaleString('en-SG');}
 
 function toggleItem(rId,type,e){
