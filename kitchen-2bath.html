@@ -172,16 +172,16 @@ canvas{display:block;touch-action:none;width:100%;height:130px}
     <span class="event-badge">Launch Exclusive</span>
   </div>
   <div class="event-title">Swiss Interior<br>Event Launch 2026</div>
-  <div class="event-sub">Kitchen & 2 Bathroom Package · Choose your tiling option below</div>
+  <div class="event-sub">Kitchen & 2 Bathroom Package · Select your option below</div>
 </div>
 
 <div class="rate-legend">
-  <div class="rate-pill"><div class="rate-dot launch"></div><span>Overlay &nbsp;·&nbsp; <strong>Tiles laid over existing</strong></span></div>
-  <div class="rate-pill"><div class="rate-dot regular"></div><span>Hacking &nbsp;·&nbsp; <strong>Existing tiles removed & re-laid</strong></span></div>
+  <div class="rate-pill"><div class="rate-dot launch"></div><span>Launch price &nbsp;·&nbsp; <strong>Event-exclusive rate</strong></span></div>
+  <div class="rate-pill"><div class="rate-dot regular"></div><span>Usual price &nbsp;·&nbsp; <strong>Standard rate</strong></span></div>
 </div>
 
 <div class="note-strip">
-  <strong>Kitchen &amp; 2 Bathroom package</strong> (BTO resale / older units) — choose <strong>Overlay</strong> or <strong>Hacking</strong> for the tiling approach; the inclusions and price differ. Any items not stated are charged separately; final costs are subject to actual quantity / job done.
+  <strong>Kitchen &amp; 2 Bathroom package</strong> — pick Condo, HDB, or Overlay BTO tiles. Same scope of works; price differs by property type. Optional opt-out: plaster the kitchen wall instead of hacking &amp; tiling it (reduces the price). Items not stated are charged separately; final costs subject to actual quantity / job done.
 </div>
 
 <div class="body">
@@ -195,7 +195,7 @@ canvas{display:block;touch-action:none;width:100%;height:130px}
 
   <div class="summary-box">
     <div class="summary-title">Your Selection</div>
-    <div id="summary-lines"><div style="font-size:12px;color:#5A5248">No option selected yet.</div></div>
+    <div id="summary-lines"><div style="font-size:12px;color:#5A5248">No package selected yet.</div></div>
     <hr class="summary-divider">
     <div class="savings-row" id="savings-row" style="display:none">
       <span>Launch savings</span><span id="savings-amt"></span>
@@ -220,9 +220,9 @@ canvas{display:block;touch-action:none;width:100%;height:130px}
     <div class="consent-box">
       <div class="consent-header">Terms &amp; Conditions — Please read carefully before signing</div>
       <div class="consent-body">
-        <p>I confirm that I have selected the Kitchen &amp; 2 Bathroom Package and the tiling option indicated above.</p>
-        <p>I understand that this selection form is for securing the package price and is subject to final site measurement, final quotation, and official contract signing with Swiss Interior.</p>
-        <p>Any items not stated in the package inclusions are charged separately, and final costs are subject to actual quantity / job done. All prices are subject to final confirmation after site measurement and design review.</p>
+        <p>I confirm that I have selected the Kitchen &amp; 2 Bathroom Package option indicated above.</p>
+        <p>I understand that this selection form is for securing the launch package price and is subject to final site measurement, final quotation, and official contract signing with Swiss Interior.</p>
+        <p>The launch price is applicable during this event period only. Any items not stated in the package inclusions are charged separately, and final costs are subject to actual quantity / job done. All prices are subject to final confirmation after site measurement and design review.</p>
         <p>After the cooling-off period, the assigned designer will prepare and issue the official contractual quotation through the Swiss Interior platform for my review and signing.</p>
         <p>As Swiss Interior is CASETrust registered, this sign-up comes with a <strong>7-day cooling-off period</strong>. During this period, I may cancel the sign-up and receive a full refund of the deposit paid, subject to the applicable CASETrust terms and conditions.</p>
       </div>
@@ -274,98 +274,53 @@ canvas{display:block;touch-action:none;width:100%;height:130px}
    Set the real numbers below, then save. Leave usual = 0 to hide the
    struck-through price / savings for that type.
    ==================================================================== */
-const CARPENTRY_BLOCK=[
-  '20ft top & bottom kitchen cabinets - solid plywood c/w selected laminate',
-  'In-house soft-closing hinges; close-match ABS edging c/w chamfer handle',
-  'Internal carcass in colour PVC; 3 drawers on soft-closing tracks',
-  'Excel Costanzo top-stay lift-up system for dish-drainer door',
-];
-const OVERLAY_INC=[
-  {sec:'Design & Services', items:[
-    'Design consultation & design proposal',
-    'Selection of colours, materials & accessories',
-    'Consultant & project management',
-    'Site inspection / work schedule / warranty',
-  ]},
-  {sec:'Demolition / Dismantling', items:[
-    'Dismantle & remove existing kitchen cabinet (incl. motor base & fridge base)',
-    'Remove bathroom sanitary & bathroom door (x2 bathrooms)',
-    'Corrugated paper protection to floors & doors (whole unit)',
-    'Haulage & clearing of renovation debris',
-  ]},
-  {sec:'Tiling / Masonry', items:[
-    'Kitchen: plaster smooth over existing wall tiles using Easi plaster + kitchen cabinet base',
-    'Master bathroom: OVERLAY wall & floor tiles c/w cement grouting - 300 x 600mm porcelain, PVC trimming / miter join',
-    'Common bathroom: OVERLAY wall & floor tiles c/w cement grouting - 300 x 600mm porcelain, PVC trimming / miter join',
-    'Tiles quoted based on $3.50 psf before GST',
-  ]},
-  {sec:'Plumbing', items:[
-    'Kitchen: connect inlet / outlet for sink & tap',
-    'Master bathroom: install sanitary - toilet bowl, wash basin & tap, bidet spray, accessories, shower mixer (supplied by owner)',
-    'Common bathroom: install sanitary as above + storage heater (supplied by owner)',
-  ]},
-  {sec:'Carpentry', items: CARPENTRY_BLOCK},
-  {sec:'Tabletop / Countertop', items:[
-    '10ft single-profile sintered stone worktop c/w 10ft backing',
-  ]},
-  {sec:'Painting', items:[
-    'Kitchen & 2 bathroom ceiling - Nippon anti-mould white (c/w oil-base sealer)',
-    'Kitchen & service yard walls - Nippon Vinilex 5000',
-  ]},
-  {sec:'Flooring', items:[
-    'Overlay existing floor tiles with 5mm vinyl flooring (area capped at 100 sqft)',
-  ]},
-  {sec:'General Cleaning', items:[
-    'Acid wash to newly tiled areas + general cleaning (kitchen & 2 bathroom)',
-  ]},
-];
-const HACKING_INC=[
-  {sec:'Design & Services', items:[
-    'Design consultation & design proposal',
-    'Selection of colours, materials & accessories',
-    'Consultant & project management',
-    'Site inspection / work schedule / warranty',
-  ]},
-  {sec:'Demolition / Dismantling', items:[
-    'Hack off existing floor & wall tiles (kitchen & 2 bathroom)',
-    'Remove kitchen cabinet, motor base & fridge base; bathroom sanitary & doors',
-    'Yard: hack off existing floor tiles incl. skirting',
-    'Corrugated paper protection (whole unit); haulage & debris clearing',
-  ]},
-  {sec:'Tiling / Masonry', items:[
-    'Kitchen: lay floor tiles c/w cement grouting + waterproofing membrane; PVC trimming / chamfer join; cabinet base; new outlet for sink; screed & plaster wall smooth (Easi plaster) + paint finish',
-    'Yard: lay floor tiles c/w cement grouting + waterproofing membrane',
-    'Master bathroom: lay wall & floor tiles c/w cement grouting + waterproofing membrane w/ upturn; PVC trimming / miter join',
-    'Common bathroom: lay wall & floor tiles c/w cement grouting + waterproofing membrane w/ upturn; PVC trimming / miter join',
-    '300 x 600mm porcelain tiles - quoted based on $3.50 psf before GST',
-  ]},
-  {sec:'Plumbing', items:[
-    'Kitchen: hack / conceal new cold-water copper piping + connect sink & tap',
-    'Master bathroom: hack / conceal new hot & cold copper piping + install sanitary (supplied by owner)',
-    'Common bathroom: hack / conceal new hot & cold copper piping + install sanitary + storage heater (supplied by owner)',
-  ]},
-  {sec:'Carpentry', items: CARPENTRY_BLOCK},
-  {sec:'Tabletop / Countertop', items:[
-    '10ft single-profile sintered stone worktop c/w 10ft backing',
-  ]},
-  {sec:'Painting', items:[
-    'Kitchen & 2 bathroom ceiling - Nippon anti-mould white (c/w oil-base sealer)',
-    'Kitchen & service yard walls - Nippon Vinilex 5000',
-  ]},
-  {sec:'General Cleaning', items:[
-    'Acid wash to newly tiled areas + general cleaning (kitchen & 2 bathroom)',
-  ]},
-];
-/* ====================================================================
-   EDIT PRICES HERE. usual=0 hides the struck-through U.P. / savings.
-   ==================================================================== */
 const PACKAGES=[
-  {id:'overlay', label:'Tile Overlay', sub:'Tiles laid over existing - no hacking', launch:14470, usual:0, inclusions:OVERLAY_INC},
-  {id:'hacking', label:'Tile Hacking', sub:'Existing tiles hacked off & re-laid', launch:21380, usual:0, inclusions:HACKING_INC},
+  {id:'condo',  label:'Condo / Private',   sub:'Kitchen & 2 bathroom package', launch:22888, usual:26888, optoff:4000},
+  {id:'hdb',    label:'HDB',               sub:'Kitchen & 2 bathroom package', launch:18888, usual:21888, optoff:4000},
+  {id:'overlay',label:'Overlay BTO tiles', sub:'Overlay over existing BTO tiles', launch:15888, usual:18888, optoff:2000},
 ];
 const FREE_GIFT='';
-const COMBO={ enabled:false, label:'', gift:'', note:'' };
-/* ==================================================================== */
+const COMBO={ enabled:true, label:'Opt-out: plaster kitchen wall (skip kitchen wall-tile hacking & tiling)', note:'Reduces the package price - Condo & HDB -$4,000, Overlay BTO -$2,000' };
+
+const INCLUSIONS=[
+  {sec:'Hacking', items:[
+    'Hacking of kitchen & 2 bathroom wall and floor tiles',
+    'Removal of 1 set of kitchen cabinet',
+    'Removal of 2 sets of bathroom fixtures',
+  ]},
+  {sec:'Tiling', items:[
+    'Construct 50mm kitchen cabinet base with tiles',
+    'Waterproofing for 2 bathrooms',
+    'Lay 300x600 or 600x600 wall tiles - kitchen & 2 bathroom',
+    'Lay 300x300 or 300x600 floor tiles - kitchen & 2 bathroom',
+    'Total wall tiles up to 800 sq ft',
+    'Total floor tiles up to 250 sq ft',
+  ]},
+  {sec:'Plumbing (labour only - fixtures supplied by owner)', items:[
+    'Install 2 bathroom accessory sets (paper holder, towel rack, etc.)',
+    'Install 1 storage heater or 2 instant heaters',
+    'Install 1 kitchen sink with tap',
+    'Install rain shower mixer x2',
+    'Install toilet bowl x2',
+    'Install bidet spray x2',
+    'Install washing machine tap',
+  ]},
+  {sec:'Electrical', items:[
+    'Connect up to 2 heater points',
+  ]},
+  {sec:'Painting', items:[
+    'Paint kitchen & 2 toilet ceiling - white emulsion paint',
+  ]},
+  {sec:'General Cleaning', items:[
+    'General post-renovation cleaning before handover',
+  ]},
+  {sec:'Miscellaneous', items:[
+    'Floor protection during renovation progress',
+  ]},
+  {sec:'Haulage', items:[
+    'Haulage & debris removal',
+  ]},
+];
 
 let selectedId=null,comboSelected=false;
 function fmt(n){return '$'+Math.round(n).toLocaleString('en-SG');}
@@ -377,7 +332,6 @@ function buildCombo(){
          <div class="combo-cb" id="combo-cb"></div>
          <div class="combo-info">
            <div class="combo-name">${COMBO.label}</div>
-           <div class="combo-gift">Get a ${COMBO.gift} — FREE</div>
            <div class="combo-note">${COMBO.note}</div>
          </div>
        </div>` : '';
@@ -410,14 +364,10 @@ function buildPackages(){
 function selectPackage(id){
   selectedId=id;
   PACKAGES.forEach(p=>document.getElementById('card-'+p.id).classList.toggle('selected',p.id===id));
-  buildInclusions();
   render();
 }
 function buildInclusions(){
-  const p=selectedId?pkgById(selectedId):null;
-  const el=document.getElementById('inc-list');
-  if(!p){ el.innerHTML='<div style="font-size:12px;color:var(--warm-gray);padding:6px 2px">Select an option above to see what\'s included.</div>'; return; }
-  el.innerHTML = p.inclusions.map((g,i)=>{
+  document.getElementById('inc-list').innerHTML = INCLUSIONS.map((g,i)=>{
     const lis = g.items.map(t=>`<div class="inc-li">${t}</div>`).join('');
     return `<div class="inc-block">
       <div class="inc-head" id="inc-head-${i}" onclick="toggleInc(${i})">
@@ -440,15 +390,12 @@ function render(){
     sl.innerHTML='<div style="font-size:12px;color:#5A5248">No option selected yet.</div>';
     document.getElementById('grand-total').textContent='$0';sr.style.display='none';checkSubmit();return;
   }
-  const save=p.usual>p.launch?p.usual-p.launch:0;
-  let html=`<div class="summary-line"><span>${p.label}<span class="s-detail">${p.sub}${p.usual>p.launch?' · U.P. '+fmt(p.usual):''}</span></span><span style="white-space:nowrap">${fmt(p.launch)}</span></div>`;
-  if(FREE_GIFT) html+=`<div class="summary-line" style="color:var(--gold)"><span>★ Free gift<span class="s-detail" style="color:var(--gold)">${FREE_GIFT}</span></span><span style="white-space:nowrap">Included</span></div>`;
-  if(comboSelected&&COMBO&&COMBO.enabled){
-    html+=`<div class="summary-line"><span>+ Essential Carpentry Package<span class="s-detail">${COMBO.note}</span></span><span style="white-space:nowrap">Quoted separately</span></div>`;
-    html+=`<div class="summary-line" style="color:var(--gold)"><span>★ Combo gift<span class="s-detail" style="color:var(--gold)">${COMBO.gift}</span></span><span style="white-space:nowrap">Included</span></div>`;
-  }
+  const off=(comboSelected&&COMBO&&COMBO.enabled)?(p.optoff||0):0;
+  const launch=p.launch-off, usual=p.usual-off, save=usual>launch?usual-launch:0;
+  const det=`${p.sub}${usual>launch?' \u00b7 U.P. '+fmt(usual):''}${off>0?' \u00b7 plaster opt-out \u2212'+fmt(off):''}`;
+  let html=`<div class="summary-line"><span>${p.label}<span class="s-detail">${det}</span></span><span style="white-space:nowrap">${fmt(launch)}</span></div>`;
   sl.innerHTML=html;
-  document.getElementById('grand-total').textContent=fmt(p.launch);
+  document.getElementById('grand-total').textContent=fmt(launch);
   if(save>0){sr.style.display='flex';document.getElementById('savings-amt').textContent=fmt(save);}
   else sr.style.display='none';
   checkSubmit();
@@ -525,18 +472,16 @@ function buildPDF(){
   doc.text('Date: '+date,R,y+6,{align:'right'});
   y+=26;doc.setDrawColor(221,208,184);doc.setLineWidth(0.3);doc.line(L,y,R,y);y+=8;
   // Selected package
+  const off=(comboSelected&&COMBO&&COMBO.enabled)?(p.optoff||0):0;
+  const eLaunch=p.launch-off, eUsual=p.usual-off;
   doc.setTextColor(184,151,90);doc.setFontSize(8);doc.text('SELECTED PACKAGE',L,y);y+=6;
-  doc.setTextColor(28,26,23);doc.setFontSize(12);doc.text(p.label,L,y);doc.text(fmt(p.launch),R,y,{align:'right'});y+=6;
-  if(p.usual>p.launch){doc.setTextColor(140,128,112);doc.setFontSize(8);doc.text('Usual price '+fmt(p.usual)+'  -  You save '+fmt(p.usual-p.launch),L,y);y+=5;}
-  if(FREE_GIFT){doc.setTextColor(184,151,90);doc.setFontSize(8);doc.text('* Free gift included: '+FREE_GIFT,L,y);y+=5;}
-  if(comboSelected&&COMBO&&COMBO.enabled){
-    doc.setTextColor(28,26,23);doc.setFontSize(9);doc.text('+ '+COMBO.label,L,y);doc.text('Quoted separately',R,y,{align:'right'});y+=5;
-    doc.setTextColor(184,151,90);doc.setFontSize(8);doc.text('* Combo gift included: '+COMBO.gift+'  ('+COMBO.note+')',L,y);y+=5;
-  }
+  doc.setTextColor(28,26,23);doc.setFontSize(12);doc.text(p.label,L,y);doc.text(fmt(eLaunch),R,y,{align:'right'});y+=6;
+  if(eUsual>eLaunch){doc.setTextColor(140,128,112);doc.setFontSize(8);doc.text('Usual price '+fmt(eUsual)+'  -  You save '+fmt(eUsual-eLaunch),L,y);y+=5;}
+  if(off>0){doc.setTextColor(184,151,90);doc.setFontSize(8);doc.text('* Opt-out applied: plaster kitchen wall in lieu of hacking & wall tiling  (-'+fmt(off)+')',L,y);y+=5;}
   y+=3;doc.setDrawColor(221,208,184);doc.line(L,y,R,y);y+=8;
   // Inclusions
   doc.setTextColor(184,151,90);doc.setFontSize(8);doc.text('PACKAGE INCLUDES',L,y);y+=6;
-  p.inclusions.forEach(g=>{
+  INCLUSIONS.forEach(g=>{
     if(y>270){doc.addPage();y=20;}
     doc.setTextColor(28,26,23);doc.setFontSize(9.5);doc.text(g.sec,L,y);y+=5;
     g.items.forEach(it=>{
@@ -551,7 +496,7 @@ function buildPDF(){
   doc.setDrawColor(221,208,184);doc.line(L,y,R,y);y+=8;
   doc.setTextColor(120,112,104);doc.setFontSize(8);doc.text('CLIENT ACKNOWLEDGEMENT',L,y);y+=6;
   doc.setTextColor(74,69,64);doc.setFontSize(8);
-  const ack='Client confirms selection of the Kitchen & 2 Bathroom Package and the tiling option indicated. This selection secures the package price and is subject to final site measurement, final quotation, and official contract signing. Items not stated in the inclusions are charged separately; final costs subject to actual quantity / job done. All prices subject to final confirmation after site measurement and design review. As a CASETrust-registered firm, a 7-day cooling-off period applies.';
+  const ack='Client confirms selection of the Kitchen & 2 Bathroom Package option indicated. This selection secures the launch package price and is subject to final site measurement, final quotation, and official contract signing. The launch price applies during the event period only. Items not stated in the inclusions are charged separately; final costs subject to actual quantity / job done. All prices subject to final confirmation after site measurement and design review. As a CASETrust-registered firm, a 7-day cooling-off period applies.';
   const al=doc.splitTextToSize(ack,R-L);doc.text(al,L,y);y+=al.length*4+6;
   if(y>240){doc.addPage();y=20;}
   doc.setTextColor(120,112,104);doc.setFontSize(8);doc.text('SIGNATURE',L,y);y+=4;
