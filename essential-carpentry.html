@@ -304,7 +304,7 @@ const CATALOGUE={
   wardrobe_sliding:{name:'Wardrobe — Sliding',min:5,base:270,extra:300},
   vanity_top:{name:'Top Vanity Cabinet',min:3,base:120,extra:180},
   vanity_bottom:{name:'Bottom Vanity Cabinet',min:3,base:200,extra:240},
-  vanity_bottom_hbb:{name:'Bottom Vanity Cabinet + Free HBB Sink',min:3,base:200,extra:240,bonus:'Free HBB sink included — worth $1,400 (T&C applies)'},
+  vanity_bottom_hbb:{name:'Bottom Vanity Cabinet + HBB Sink',min:3,base:200,extra:240,topup:800,bonus:'HBB sink top-up: +$800 (included in price, T&C applies)'},
 };
 const ROOMS=[
   {id:'kitchen',section:'sec-kitchen',label:'Kitchen',flat:true,items:['kitchen','kitchen_sintered']},
@@ -322,7 +322,7 @@ const state={};
 ROOMS.forEach(r=>{state[r.id]={};r.items.forEach(t=>{state[r.id][t]={checked:false,ft:CATALOGUE[t].min};});});
 
 function uid(r,t){return r+'__'+t;}
-function calcPrice(c,ft){if(!ft||ft<=0)return 0;const b=c.base*c.min;return ft<=c.min?b:b+(ft-c.min)*c.extra;}
+function calcPrice(c,ft){if(!ft||ft<=0)return 0;const b=c.base*c.min;const p=ft<=c.min?b:b+(ft-c.min)*c.extra;return p+(c.topup||0);}
 function savings(c){return(c.extra-c.base)*c.min;}
 function fmt(n){return'$'+Math.round(n).toLocaleString('en-SG');}
 
@@ -339,7 +339,7 @@ function refreshRow(rId,type){
   if(!el)return;
   el.innerHTML=s.checked&&p>0
     ?`<div class="price-amt">${fmt(p)}</div><div class="price-savings">Save ${fmt(savings(c))}</div>`
-    :`<div class="price-amt" style="color:var(--warm-gray);font-size:12px">${fmt(c.base*c.min)}</div>`;
+    :`<div class="price-amt" style="color:var(--warm-gray);font-size:12px">${fmt(c.base*c.min+(c.topup||0))}</div>`;
   updateRH(rId);
 }
 function updateFt(rId,type,v,e){
@@ -383,7 +383,7 @@ function buildItemRows(rId,items){
         <span>ft</span>
       </div>
       <div class="rate-tags"><div class="rtag launch">$${c.base}/ft · ${c.min}ft</div><br><div class="rtag regular">$${c.extra}/ft · add'l</div></div>
-      <div class="price-col" id="price-${id}"><div class="price-amt" style="color:var(--warm-gray);font-size:12px">${fmt(c.base*c.min)}</div></div>
+      <div class="price-col" id="price-${id}"><div class="price-amt" style="color:var(--warm-gray);font-size:12px">${fmt(c.base*c.min+(c.topup||0))}</div></div>
     </div>`;
   }).join('');
 }
