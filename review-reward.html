@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Swiss Interior — Review & Reward</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=DM+Sans:wght@300;400;500&family=Montserrat:wght@200;300;400&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --gold:#B8975A;--gold-light:#D4B483;--gold-pale:#F5EDD8;
+  --dark:#1C1A17;--mid:#4A4540;--warm-gray:#8C8070;
+  --cream:#FDFAF5;--rule:#DDD0B8;
+}
+html,body{background:var(--cream);font-family:'DM Sans',sans-serif;color:var(--dark);min-height:100vh}
+.page{max-width:720px;margin:0 auto;padding:0 0 60px}
+
+/* HEADER */
+.header{background:var(--dark);padding:32px 40px 28px;position:relative;overflow:hidden}
+.header::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:var(--gold)}
+.header-top{display:flex;align-items:flex-start;justify-content:flex-end;margin-bottom:24px}
+.event-badge{display:inline-block;background:var(--gold);color:var(--dark);font-size:10px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;padding:4px 12px}
+.event-title{font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:600;color:#fff;line-height:1.15;margin-bottom:6px}
+.event-sub{font-size:12px;color:var(--warm-gray);letter-spacing:.04em}
+
+/* OFFER BANNER */
+.offer{background:var(--gold-pale);border-left:3px solid var(--gold);padding:16px 40px}
+.offer-title{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;color:var(--dark);margin-bottom:4px}
+.offer-text{font-size:12.5px;color:var(--mid);line-height:1.6}
+.offer-text strong{color:var(--dark);font-weight:500}
+
+/* BODY */
+.body{padding:0 40px}
+.section-head{display:flex;align-items:center;gap:10px;margin:24px 0 10px}
+.section-head span{font-size:10px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+.section-head::after{content:'';flex:1;height:0.5px;background:var(--rule)}
+
+/* STEPS */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:4px}
+.step{background:#FAF7F2;border:0.5px solid var(--rule);border-radius:6px;padding:12px 10px;text-align:center}
+.step-n{width:24px;height:24px;border-radius:50%;background:var(--gold);color:#fff;font-size:12px;font-weight:500;display:flex;align-items:center;justify-content:center;margin:0 auto 8px}
+.step-t{font-size:11px;color:var(--mid);line-height:1.4}
+
+/* REVIEW CARDS */
+.rev-card{display:flex;align-items:center;gap:14px;border:1px solid var(--rule);border-radius:6px;padding:14px;margin-bottom:10px;background:#FAF7F2;transition:all .15s}
+.rev-card.done{border-color:var(--gold);background:var(--gold-pale)}
+.rev-cb{width:24px;height:24px;border:1.5px solid var(--rule);border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:#fff;cursor:pointer;transition:all .15s;-webkit-tap-highlight-color:transparent}
+.rev-cb.on{background:var(--gold);border-color:var(--gold)}
+.rev-cb.on::after{content:'✓';color:#fff;font-size:14px;font-weight:700}
+.rev-info{flex:1;min-width:0}
+.rev-name{font-size:13.5px;font-weight:500;color:var(--dark)}
+.rev-sub{font-size:11px;color:var(--warm-gray);margin-top:2px}
+.rev-btn{flex-shrink:0;display:inline-block;text-decoration:none;background:var(--dark);color:var(--gold-light);font-size:11.5px;font-weight:500;letter-spacing:.04em;padding:9px 14px;border-radius:4px;white-space:nowrap}
+.rev-btn:hover{background:#2A2723}
+.rev-hint{font-size:11px;color:var(--warm-gray);margin:2px 2px 10px;line-height:1.5}
+
+/* CALCULATOR */
+.calc{border:0.5px solid var(--rule);border-radius:6px;background:#FAF7F2;padding:14px}
+.calc-row{display:flex;align-items:center;gap:10px}
+.calc-row label{font-size:12px;color:var(--mid);flex:1}
+.calc-row .cwrap{display:flex;align-items:center;gap:4px}
+.calc-row .cwrap span{font-size:13px;color:var(--warm-gray)}
+.calc-row input{width:120px;text-align:right;font-size:13px;font-family:'DM Sans',sans-serif;padding:8px 10px;border:1px solid var(--rule);border-radius:4px;background:#fff;color:var(--dark)}
+.calc-row input:focus{outline:none;border-color:var(--gold)}
+.calc-result{display:flex;justify-content:space-between;align-items:baseline;margin-top:12px;padding-top:12px;border-top:0.5px solid var(--rule)}
+.calc-result .lbl{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--warm-gray)}
+.calc-result .val{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:600;color:var(--gold)}
+.calc-note{font-size:10.5px;color:var(--warm-gray);margin-top:6px}
+
+/* SIGNATURE / CLIENT */
+.sig-section{margin-top:28px}
+.sig-label{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--warm-gray);margin-bottom:8px}
+.sig-fields{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.sig-field label{font-size:10px;color:var(--warm-gray);display:block;margin-bottom:4px;letter-spacing:.06em;text-transform:uppercase}
+.sig-field input{width:100%;border:none;border-bottom:1px solid var(--rule);background:transparent;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--dark);padding:6px 0;outline:none;-webkit-appearance:none}
+.sig-field input::placeholder{color:#C0B8A8}
+.sig-field input:focus{border-bottom-color:var(--gold)}
+
+/* CONSENT */
+.consent-box{margin-top:8px;border:0.5px solid var(--rule);border-radius:4px;overflow:hidden}
+.consent-header{background:#FAF7F2;padding:10px 14px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--warm-gray)}
+.consent-body{padding:14px;background:#fff;font-size:11.5px;color:var(--mid);line-height:1.75}
+.consent-body p{margin-bottom:10px}
+.consent-body p:last-child{margin-bottom:0}
+.consent-row{display:flex;align-items:flex-start;gap:10px;margin-top:14px;padding:12px 14px;background:var(--gold-pale);border-radius:3px;border:0.5px solid var(--rule)}
+.consent-cb{width:22px;height:22px;border:1.5px solid var(--rule);border-radius:2px;flex-shrink:0;margin-top:2px;cursor:pointer;display:flex;align-items:center;justify-content:center;background:#fff;transition:all .15s;-webkit-tap-highlight-color:transparent}
+.consent-cb.on{background:var(--gold);border-color:var(--gold)}
+.consent-cb.on::after{content:'✓';color:#fff;font-size:13px;font-weight:700}
+.consent-confirm-text{font-size:12px;color:var(--dark);font-weight:500;line-height:1.5}
+
+/* CANVAS */
+.canvas-wrap{border:1px solid var(--rule);border-radius:3px;background:#fff;position:relative;height:130px;margin-bottom:4px}
+canvas{display:block;touch-action:none;width:100%;height:130px}
+.canvas-hint{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:13px;color:#D0C8B8;pointer-events:none;text-align:center}
+.clear-btn{display:block;margin-top:6px;font-size:11px;color:var(--warm-gray);background:none;border:0.5px solid var(--rule);border-radius:3px;cursor:pointer;letter-spacing:.06em;text-transform:uppercase;font-family:'DM Sans',sans-serif;padding:5px 14px}
+.clear-btn:hover{color:var(--gold);border-color:var(--gold)}
+
+/* SUBMIT */
+.submit-btn{margin-top:20px;width:100%;padding:16px;background:var(--gold);color:var(--dark);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;border:none;border-radius:3px;cursor:pointer;transition:background .2s;-webkit-appearance:none}
+.submit-btn:hover{background:var(--gold-light)}
+.submit-btn:disabled{background:#D0C8B8;cursor:not-allowed}
+.confirmed-box{display:none;text-align:center;padding:32px;background:var(--gold-pale);border-radius:3px;margin-top:20px}
+.confirmed-box h3{font-family:'Cormorant Garamond',serif;font-size:24px;color:var(--dark);margin-bottom:8px}
+.confirmed-box p{font-size:13px;color:var(--warm-gray)}
+.dl-btn{display:inline-block;margin-top:14px;padding:13px 22px;background:var(--dark);color:var(--gold-light);font-size:12px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;border:none;border-radius:3px;cursor:pointer;font-family:'DM Sans',sans-serif}
+.crm-reminder{margin-top:18px;padding:14px;background:#fff;border:0.5px solid var(--rule);border-radius:3px;text-align:left}
+.crm-reminder .crm-t{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:6px;font-weight:500}
+.crm-reminder .crm-x{font-size:11.5px;color:var(--mid);line-height:1.7}
+
+/* FOOTER */
+.footer{background:var(--dark);margin-top:32px;padding:22px 40px}
+.footer-info{font-size:11px;color:#7A7068;line-height:1.8;text-align:center}
+.footer-info strong{color:#C8BEA8;font-weight:500;display:block;margin-bottom:3px;font-size:12px}
+.footer-contact{display:flex;flex-wrap:wrap;justify-content:center;gap:4px 20px;margin-top:4px}
+.footer-contact span{font-size:11px;color:#6A6260}
+.footer-divider-line{border:none;border-top:0.5px solid #2E2B28;margin:14px 0}
+.footer-tagline{text-align:center;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:300;letter-spacing:.3em;color:#4A4540;text-transform:uppercase}
+
+@media(max-width:600px){
+  .header{padding:24px 20px 22px}
+  .offer{padding:14px 20px}
+  .body{padding:0 20px}
+  .sig-fields{grid-template-columns:1fr}
+  .steps{grid-template-columns:repeat(2,1fr)}
+  .rev-card{flex-wrap:wrap}
+  .footer{padding:20px}
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<div class="header">
+  <div class="header-top">
+    <span class="event-badge">Review Reward</span>
+  </div>
+  <div class="event-title">Swiss Interior<br>Review &amp; Reward</div>
+  <div class="event-sub">Review us &amp; enjoy a free E1 → E0 plywood upgrade</div>
+</div>
+
+<div class="offer">
+  <div class="offer-title">Free E0 plywood upgrade</div>
+  <div class="offer-text">Leave us a review on <strong>Google</strong> and <strong>Facebook</strong> and receive a <strong>free upgrade from E1 to E0 plywood</strong> for your carpentry — worth <strong>15% of your carpentry amount</strong>. E0 plywood has lower formaldehyde emission for a healthier home.</div>
+</div>
+
+<div class="body">
+  <div class="section-head"><span>How it works</span></div>
+  <div class="steps">
+    <div class="step"><div class="step-n">1</div><div class="step-t">Tap to review us on Google</div></div>
+    <div class="step"><div class="step-n">2</div><div class="step-t">Tap to review us on Facebook</div></div>
+    <div class="step"><div class="step-n">3</div><div class="step-t">Confirm &amp; register below</div></div>
+    <div class="step"><div class="step-n">4</div><div class="step-t">Enjoy your free E0 upgrade</div></div>
+  </div>
+
+  <div class="section-head"><span>Leave your reviews</span></div>
+  <div class="rev-hint">Tap each button to open the review page, post your review, then tick to confirm.</div>
+
+  <div class="rev-card" id="card-google">
+    <div class="rev-cb" id="cb-google" onclick="toggleReview('google')"></div>
+    <div class="rev-info"><div class="rev-name">Google review</div><div class="rev-sub">I have left a Google review</div></div>
+    <a class="rev-btn" id="lnk-google" href="#" target="_blank" rel="noopener">Review on Google</a>
+  </div>
+
+  <div class="rev-card" id="card-fb">
+    <div class="rev-cb" id="cb-fb" onclick="toggleReview('fb')"></div>
+    <div class="rev-info"><div class="rev-name">Facebook review</div><div class="rev-sub">I have left a Facebook review</div></div>
+    <a class="rev-btn" id="lnk-fb" href="#" target="_blank" rel="noopener">Review on Facebook</a>
+  </div>
+
+  <div class="section-head"><span>Your reward value</span></div>
+  <div class="calc">
+    <div class="calc-row">
+      <label for="f-carpentry">Carpentry amount (optional)</label>
+      <div class="cwrap"><span>$</span><input type="number" min="0" step="100" id="f-carpentry" placeholder="0" inputmode="numeric"></div>
+    </div>
+    <div class="calc-result">
+      <span class="lbl">Free E0 upgrade value (15%)</span>
+      <span class="val" id="calc-val">$0</span>
+    </div>
+    <div class="calc-note">Indicative only — the upgrade is applied to the carpentry in your signed Swiss Interior contract.</div>
+  </div>
+
+  <div class="sig-section">
+    <div class="sig-label">Client Details</div>
+    <div class="sig-fields">
+      <div class="sig-field"><label>Full Name</label><input type="text" placeholder="As per NRIC" id="f-name" autocomplete="off"></div>
+      <div class="sig-field"><label>Contact Number</label><input type="tel" placeholder="+65" id="f-phone" autocomplete="off"></div>
+      <div class="sig-field"><label>Unit Address</label><input type="text" placeholder="Block / Unit No." id="f-addr" autocomplete="off"></div>
+      <div class="sig-field"><label>Date</label><input type="text" id="f-date" readonly></div>
+    </div>
+
+    <div class="sig-label">Acknowledgement</div>
+    <div class="consent-box">
+      <div class="consent-header">Terms &amp; Conditions — Please read before signing</div>
+      <div class="consent-body">
+        <p>I confirm that I have left a genuine review for Swiss Interior on both <strong>Google</strong> and <strong>Facebook</strong>.</p>
+        <p>I understand the reward is a <strong>free upgrade from E1 to E0 plywood</strong> for my carpentry works, valued at <strong>15% of my carpentry amount</strong>, and that it is applied to the carpentry works in my signed Swiss Interior contract.</p>
+        <p>The reward is subject to verification of the reviews, is valid during the event period, is non-exchangeable for cash, and applies to one project per client. Swiss Interior reserves the right to amend these terms.</p>
+      </div>
+    </div>
+    <div class="consent-row">
+      <div class="consent-cb" id="consent-cb" onclick="toggleConsent()"></div>
+      <div class="consent-confirm-text">I have read, understood, and agree to the terms and conditions above.</div>
+    </div>
+
+    <div class="sig-label" style="margin-top:22px">Signature</div>
+    <div class="canvas-wrap" id="canvas-wrap">
+      <div class="canvas-hint" id="canvas-hint">Sign here with finger</div>
+      <canvas id="sig-canvas"></canvas>
+    </div>
+    <button class="clear-btn" onclick="clearSig()">✕ Clear Signature</button>
+
+    <button class="submit-btn" id="submit-btn" onclick="handleSubmit()" disabled>Confirm &amp; Claim Reward</button>
+    <div class="confirmed-box" id="confirmed-box">
+      <h3>Reward Registered</h3>
+      <p>Thank you for your reviews! Your free E0 plywood upgrade has been recorded.</p>
+      <button class="dl-btn" id="dl-btn" onclick="downloadPDF()">Download PDF copy</button>
+      <div class="crm-reminder">
+        <div class="crm-t">⚑ Designer — before leaving this screen</div>
+        <div class="crm-x">Verify the Google &amp; Facebook reviews, save this signed PDF into the client's CRM record, and note the E0 upgrade in the carpentry contract.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <div class="footer-info">
+    <strong>Swiss Interior</strong>
+    70 Ubi Crescent #01-10, Ubi TechPark, Singapore 408570
+    <div class="footer-contact">
+      <span>admin@swissinterior.com.sg</span>
+      <span>Office Hotline: 9239 1069</span>
+      <span>www.swissinterior.com.sg</span>
+    </div>
+  </div>
+  <hr class="footer-divider-line">
+  <div class="footer-tagline">Space to Match</div>
+</div>
+
+</div>
+
+<script>
+/* ====================================================================
+   EDIT YOUR REVIEW LINKS HERE
+   ==================================================================== */
+const GOOGLE_REVIEW_URL='https://www.google.com/maps/search/?api=1&query=Swiss%20Interior%20Design%20Singapore';
+const FACEBOOK_REVIEW_URL='https://www.facebook.com/SwissInteriorDesign/reviews';
+const UPGRADE_PCT=15;
+/* ==================================================================== */
+
+let googleDone=false, fbDone=false, consented=false, drawing=false, hasSig=false, lastCanvasW=0;
+function fmt(n){return '$'+Math.round(n).toLocaleString('en-SG');}
+
+document.getElementById('lnk-google').href=GOOGLE_REVIEW_URL;
+document.getElementById('lnk-fb').href=FACEBOOK_REVIEW_URL;
+document.getElementById('f-date').value=new Date().toLocaleDateString('en-SG',{day:'2-digit',month:'2-digit',year:'numeric'});
+
+function toggleReview(which){
+  if(which==='google'){googleDone=!googleDone;document.getElementById('cb-google').classList.toggle('on',googleDone);document.getElementById('card-google').classList.toggle('done',googleDone);}
+  else{fbDone=!fbDone;document.getElementById('cb-fb').classList.toggle('on',fbDone);document.getElementById('card-fb').classList.toggle('done',fbDone);}
+  checkSubmit();
+}
+function toggleConsent(){consented=!consented;document.getElementById('consent-cb').classList.toggle('on',consented);checkSubmit();}
+
+function carpentryAmt(){return parseFloat(document.getElementById('f-carpentry').value)||0;}
+function upgradeValue(){return carpentryAmt()*UPGRADE_PCT/100;}
+function updateCalc(){document.getElementById('calc-val').textContent=fmt(upgradeValue());}
+document.getElementById('f-carpentry').addEventListener('input',updateCalc);
+
+/* Signature canvas — retina-aware, preserved across width changes */
+const canvasEl=document.getElementById('sig-canvas');
+const canvasWrap=document.getElementById('canvas-wrap');
+function resizeCanvas(){
+  const ratio=window.devicePixelRatio||1, w=canvasWrap.offsetWidth, h=130;
+  if(w===lastCanvasW)return;
+  let prev=null; if(hasSig){try{prev=canvasEl.toDataURL('image/png');}catch(err){}}
+  lastCanvasW=w;
+  canvasEl.width=w*ratio;canvasEl.height=h*ratio;canvasEl.style.width=w+'px';canvasEl.style.height=h+'px';
+  const c=canvasEl.getContext('2d');c.scale(ratio,ratio);c.strokeStyle='#1C1A17';c.lineWidth=2;c.lineCap='round';c.lineJoin='round';
+  if(prev){const img=new Image();img.onload=function(){c.drawImage(img,0,0,w,h);};img.src=prev;}
+}
+resizeCanvas();
+window.addEventListener('resize',resizeCanvas);
+function getPos(e){const r=canvasEl.getBoundingClientRect();const s=e.touches?e.touches[0]:e;return{x:s.clientX-r.left,y:s.clientY-r.top};}
+function getCtx(){const c=canvasEl.getContext('2d');c.strokeStyle='#1C1A17';c.lineWidth=2;c.lineCap='round';c.lineJoin='round';return c;}
+canvasEl.addEventListener('mousedown',e=>{drawing=true;const p=getPos(e);getCtx().beginPath();getCtx().moveTo(p.x,p.y);});
+canvasEl.addEventListener('mousemove',e=>{if(!drawing)return;const p=getPos(e);const c=getCtx();c.lineTo(p.x,p.y);c.stroke();hasSig=true;document.getElementById('canvas-hint').style.display='none';checkSubmit();});
+canvasEl.addEventListener('mouseup',()=>{drawing=false;});
+canvasEl.addEventListener('mouseleave',()=>{drawing=false;});
+canvasEl.addEventListener('touchstart',e=>{e.preventDefault();drawing=true;const p=getPos(e);getCtx().beginPath();getCtx().moveTo(p.x,p.y);},{passive:false});
+canvasEl.addEventListener('touchmove',e=>{e.preventDefault();if(!drawing)return;const p=getPos(e);const c=getCtx();c.lineTo(p.x,p.y);c.stroke();hasSig=true;document.getElementById('canvas-hint').style.display='none';checkSubmit();},{passive:false});
+canvasEl.addEventListener('touchend',()=>{drawing=false;});
+function clearSig(){const c=canvasEl.getContext('2d');c.clearRect(0,0,canvasEl.width,canvasEl.height);hasSig=false;document.getElementById('canvas-hint').style.display='';checkSubmit();}
+
+function checkSubmit(){
+  const hn=document.getElementById('f-name').value.trim().length>0;
+  document.getElementById('submit-btn').disabled=!(googleDone&&fbDone&&hn&&hasSig&&consented);
+}
+['f-name','f-phone','f-addr'].forEach(id=>document.getElementById(id).addEventListener('input',checkSubmit));
+
+function buildPDF(){
+  if(!window.jspdf||!window.jspdf.jsPDF)return null;
+  const jsPDF=window.jspdf.jsPDF;
+  const doc=new jsPDF({unit:'mm',format:'a4'});
+  const name=document.getElementById('f-name').value.trim()||'-';
+  const phone=document.getElementById('f-phone').value.trim()||'-';
+  const addr=document.getElementById('f-addr').value.trim()||'-';
+  const date=document.getElementById('f-date').value;
+  const amt=carpentryAmt(), val=upgradeValue();
+  const L=16,R=194;let y;
+  doc.setFillColor(28,26,23);doc.rect(0,0,210,30,'F');
+  doc.setTextColor(184,151,90);doc.setFontSize(8);doc.text('REVIEW REWARD',L,11);
+  doc.setTextColor(255,255,255);doc.setFontSize(17);doc.text('Swiss Interior',L,20);
+  doc.setFontSize(10);doc.setTextColor(200,190,168);doc.text('Review & Reward - Free E1 to E0 plywood upgrade',L,26);
+  y=40;
+  doc.setTextColor(120,112,104);doc.setFontSize(8);doc.text('CLIENT',L,y);
+  doc.setTextColor(28,26,23);doc.setFontSize(11);doc.text(name,L,y+6);
+  doc.setFontSize(9);doc.setTextColor(74,69,64);
+  doc.text('Contact: '+phone,L,y+12);doc.text('Unit: '+addr,L,y+17);
+  doc.text('Date: '+date,R,y+6,{align:'right'});
+  y+=26;doc.setDrawColor(221,208,184);doc.setLineWidth(0.3);doc.line(L,y,R,y);y+=8;
+  doc.setTextColor(184,151,90);doc.setFontSize(8);doc.text('REVIEWS CONFIRMED',L,y);y+=6;
+  doc.setTextColor(28,26,23);doc.setFontSize(10);
+  doc.text('Google review',L,y);doc.text(googleDone?'Confirmed':'Not confirmed',R,y,{align:'right'});y+=6;
+  doc.text('Facebook review',L,y);doc.text(fbDone?'Confirmed':'Not confirmed',R,y,{align:'right'});y+=8;
+  doc.setDrawColor(221,208,184);doc.line(L,y,R,y);y+=8;
+  doc.setTextColor(184,151,90);doc.setFontSize(8);doc.text('REWARD',L,y);y+=6;
+  doc.setTextColor(28,26,23);doc.setFontSize(10);doc.text('Free upgrade: E1 to E0 plywood for carpentry',L,y);y+=6;
+  if(amt>0){
+    doc.text('Carpentry amount',L,y);doc.text(fmt(amt),R,y,{align:'right'});y+=6;
+    doc.setTextColor(184,151,90);doc.text('Upgrade value (15%)',L,y);doc.text(fmt(val),R,y,{align:'right'});y+=6;
+  }else{
+    doc.setTextColor(140,128,112);doc.setFontSize(8);doc.text('Upgrade value = 15% of final carpentry amount in contract',L,y);y+=6;
+  }
+  y+=2;doc.setDrawColor(221,208,184);doc.line(L,y,R,y);y+=8;
+  doc.setTextColor(120,112,104);doc.setFontSize(8);doc.text('ACKNOWLEDGEMENT',L,y);y+=6;
+  doc.setTextColor(74,69,64);doc.setFontSize(8);
+  const ack='Client confirms a genuine review was left for Swiss Interior on both Google and Facebook. The reward is a free upgrade from E1 to E0 plywood for carpentry, valued at 15% of the carpentry amount, applied to the carpentry works in the signed Swiss Interior contract. Reward is subject to verification of the reviews, valid during the event period, non-exchangeable for cash, and limited to one project per client.';
+  const al=doc.splitTextToSize(ack,R-L);doc.text(al,L,y);y+=al.length*4+6;
+  if(y>240){doc.addPage();y=20;}
+  doc.setTextColor(120,112,104);doc.setFontSize(8);doc.text('SIGNATURE',L,y);y+=4;
+  try{doc.addImage(canvasEl.toDataURL('image/png'),'PNG',L,y,60,25);}catch(err){}
+  y+=28;doc.setDrawColor(221,208,184);doc.line(L,y,L+60,y);
+  doc.setFontSize(8);doc.setTextColor(74,69,64);doc.text(name,L,y+5);
+  doc.setFillColor(28,26,23);doc.rect(0,287,210,10,'F');
+  doc.setTextColor(150,140,124);doc.setFontSize(7);
+  doc.text('Swiss Interior - 70 Ubi Crescent #01-10, Ubi TechPark, Singapore 408570 - 9239 1069 - admin@swissinterior.com.sg',105,293,{align:'center'});
+  return doc;
+}
+
+function downloadPDF(){
+  const name=document.getElementById('f-name').value.trim();
+  const fileName='SwissInterior_ReviewReward_'+((name.replace(/[^a-zA-Z0-9]/g,'_'))||'Client')+'.pdf';
+  try{const doc=buildPDF();if(doc){doc.save(fileName);}else{alert('PDF library still loading — please try again in a moment.');}}
+  catch(err){console.error('PDF error',err);alert('Could not generate the PDF on this device.');}
+}
+
+function handleSubmit(){
+  document.getElementById('submit-btn').style.display='none';
+  document.getElementById('confirmed-box').style.display='block';
+  document.getElementById('confirmed-box').scrollIntoView({behavior:'smooth'});
+  downloadPDF();
+}
+updateCalc();checkSubmit();
+</script>
+</body>
+</html>
