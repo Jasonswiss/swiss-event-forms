@@ -172,7 +172,7 @@ canvas{display:block;touch-action:none;width:100%;height:130px}
     <span class="event-badge">Launch Exclusive</span>
   </div>
   <div class="event-title">Swiss Interior<br>Event Launch 2026</div>
-  <div class="event-sub">New Condo Essential · Select your bedroom count below</div>
+  <div class="event-sub">New Condo Essential · Select your unit size below</div>
 </div>
 
 <div class="rate-legend">
@@ -181,7 +181,7 @@ canvas{display:block;touch-action:none;width:100%;height:130px}
 </div>
 
 <div class="note-strip">
-  <strong>New Condo Essential package</strong> — same scope across all sizes; only the price differs by bedroom count. Any items not stated in the package inclusions are charged separately; final costs are subject to actual quantity / job done.
+  <strong>New Condo Essential package</strong> — same scope across all sizes; only the price differs by unit size. Any items not stated in the package inclusions are charged separately; final costs are subject to actual quantity / job done.
 </div>
 
 <div class="body">
@@ -220,7 +220,7 @@ canvas{display:block;touch-action:none;width:100%;height:130px}
     <div class="consent-box">
       <div class="consent-header">Terms &amp; Conditions — Please read carefully before signing</div>
       <div class="consent-body">
-        <p>I confirm that I have selected the New Condo Essential package and the bedroom count indicated above.</p>
+        <p>I confirm that I have selected the New Condo Essential package and the unit size indicated above.</p>
         <p>I understand that this selection form is for securing the launch package price and is subject to final site measurement, final quotation, and official contract signing with Swiss Interior.</p>
         <p>The launch price is applicable during this event period only. Any items not stated in the package inclusions are charged separately, and final costs are subject to actual quantity / job done. All prices are subject to final confirmation after site measurement and design review.</p>
         <p>After the cooling-off period, the assigned designer will prepare and issue the official contractual quotation through the Swiss Interior platform for my review and signing.</p>
@@ -275,44 +275,48 @@ canvas{display:block;touch-action:none;width:100%;height:130px}
    struck-through price / savings for that type.
    ==================================================================== */
 const PACKAGES=[
-  {id:'c2', label:'Condo 2-Bedroom', sub:'Full condo renovation package', launch:9888,  usual:12888},
-  {id:'c3', label:'Condo 3-Bedroom', sub:'Full condo renovation package', launch:10888, usual:13888},
-  {id:'c4', label:'Condo 4-Bedroom', sub:'Full condo renovation package', launch:11888, usual:14888},
+  {id:'c2', label:'Condo Studio / 2-Room', sub:'Condo essential package', launch:4388, usual:4888},
+  {id:'c3', label:'Condo 3-Room', sub:'Condo essential package', launch:5388, usual:5888},
+  {id:'c4', label:'Condo 4-Room', sub:'Condo essential package', launch:5888, usual:6888},
+  {id:'c5', label:'Condo 5-Room', sub:'Condo essential package', launch:6388, usual:7888},
 ];
-const FREE_GIFT='';
-const COMBO={ enabled:false, label:'', note:'' };
+const FREE_GIFT=''; // unconditional gift with every package; e.g. 'Free HBB sink — worth $1,400'  (leave '' for none)
+const COMBO={        // optional combo upsell — combine with carpentry to unlock a free gift
+  enabled:false,
+  label:'Combine with the Essential Carpentry Package',
+  gift:'FREE 65" Samsung TV',
+  note:'Carpentry is quoted separately after site measurement',
+};
+/* ==================================================================== */
 
 const INCLUSIONS=[
   {sec:'Design & Services', items:[
-    'Design consultation & space planning',
-    'Design proposal + 3D perspectives (up to 3 views)',
-    'Selection of colours, materials & accessories',
-    'Consultant & project management',
-    'Site inspection / work schedule / warranty',
-    'Defect checks upon collection of key',
+    'Space planning & furniture layout plan proposal',
+    'Design intent presentation',
+    'General lighting & electrical wiring planning',
+    'General ceiling design including bulkheads',
+    'Concept design + material & colour scheme proposal',
+    "Bird's-eye view (1 key view) + 3D computerised perspectives",
+    'Completed design drawings set',
+    'Project management: weekly updates & site inspection, project schedule, in-house sub-con coordination, MCST reno application, third-party aircon coordination',
   ]},
-  {sec:'False Ceiling / Plastering', items:[
-    'Living: plasterboard ceiling - 9.5ft cove-light pelmet w/ LED channel, 2 aircon pelmets + 1 curtain pelmet, timber support for ceiling fan',
-    'Master bedroom: plasterboard ceiling - 8.5ft cove-light pelmet w/ LED channel, 1 curtain pelmet, 8.5ft L-box (along wardrobe & FCU)',
-  ]},
-  {sec:'Carpentry', items:[
-    'Foyer: 2ft full-height casement shoe cabinet - BLUM soft-close, 1 internal drawer set, adjustable shelving',
-    'Foyer: 3ft half-height cabinet - BLUM soft-close, adjustable shelving, 1 curve edge, depth up to 400mm',
-    'Living: 6ft freestanding TV console / settee - pocket door, 3 BLUM soft-close drawer sets, height up to 500mm',
-    'Living: 6ft full-height TV feature wall in laminate w/ cable management',
-    'Colour-PVC carcass, up to 2.6m for full-height cabinets; subject to site measurement (VO if dimensions differ)',
+  {sec:'Electrical', items:[
+    'Install surface light at existing light point',
+    'Install & connect cooker hood',
+    'Install & connect heater',
   ]},
   {sec:'Painting', items:[
-    'Whole-house internal walls - Nippon odourless water-based sealer',
-    'Whole-house internal walls - Nippon Vinilex 5000 (up to 4 colours + white), ceiling in matex white',
-    'Two rounds of painting + up to two touch-ups; window / skirting / socket protection (balcony walls excluded)',
+    'Whole-house walls — Nippon paint (Vinilex 5000 series)',
+    'Whole-house ceiling — Nippon paint (Matex white)',
   ]},
   {sec:'General Cleaning', items:[
-    'General cleaning (1-time) for whole house before handover',
+    'General post-renovation cleaning before handover',
   ]},
-  {sec:'Others', items:[
-    'RP board protection for flooring, doors & door frames during works',
-    'Disposal of rubbish & debris (1 trip)',
+  {sec:'Miscellaneous', items:[
+    'Floor protection during renovation progress',
+  ]},
+  {sec:'Haulage', items:[
+    'Haulage & debris removal',
   ]},
 ];
 
@@ -496,7 +500,7 @@ function buildPDF(){
   doc.setDrawColor(221,208,184);doc.line(L,y,R,y);y+=8;
   doc.setTextColor(120,112,104);doc.setFontSize(8);doc.text('CLIENT ACKNOWLEDGEMENT',L,y);y+=6;
   doc.setTextColor(74,69,64);doc.setFontSize(8);
-  const ack='Client confirms selection of the New Condo Essential package and the bedroom count indicated. This selection secures the launch package price and is subject to final site measurement, final quotation, and official contract signing. The launch price applies during the event period only. Items not stated in the inclusions are charged separately; final costs subject to actual quantity / job done. All prices subject to final confirmation after site measurement and design review. As a CASETrust-registered firm, a 7-day cooling-off period applies.';
+  const ack='Client confirms selection of the New Condo Essential package and the unit size indicated. This selection secures the launch package price and is subject to final site measurement, final quotation, and official contract signing. The launch price applies during the event period only. Items not stated in the inclusions are charged separately; final costs subject to actual quantity / job done. All prices subject to final confirmation after site measurement and design review. As a CASETrust-registered firm, a 7-day cooling-off period applies.';
   const al=doc.splitTextToSize(ack,R-L);doc.text(al,L,y);y+=al.length*4+6;
   if(y>240){doc.addPage();y=20;}
   doc.setTextColor(120,112,104);doc.setFontSize(8);doc.text('SIGNATURE',L,y);y+=4;
