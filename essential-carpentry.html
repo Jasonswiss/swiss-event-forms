@@ -322,8 +322,8 @@ const state={};
 ROOMS.forEach(r=>{state[r.id]={};r.items.forEach(t=>{state[r.id][t]={checked:false,ft:CATALOGUE[t].min};});});
 
 function uid(r,t){return r+'__'+t;}
-function calcPrice(c,ft){if(!ft||ft<=0)return 0;const b=c.base*c.min;const p=ft<=c.min?b:b+(ft-c.min)*c.extra;return p+(c.topup||0);}
-function savings(c){return(c.extra-c.base)*c.min+(c.topupSave||0);}
+function calcPrice(c,ft){if(!ft||ft<=0)return 0;const p=ft<=c.min?ft*c.base:c.base*c.min+(ft-c.min)*c.extra;return p+(c.topup||0);}
+function savings(c,ft){var q=Math.min(Math.max(ft||0,0),c.min);return q*(c.extra-c.base)+(c.topupSave||0);}
 function fmt(n){return'$'+Math.round(n).toLocaleString('en-SG');}
 
 function toggleItem(rId,type,e){
@@ -338,7 +338,7 @@ function refreshRow(rId,type){
   const c=CATALOGUE[type],s=state[rId][type],id=uid(rId,type),p=calcPrice(c,s.ft),el=document.getElementById('price-'+id);
   if(!el)return;
   el.innerHTML=s.checked&&p>0
-    ?`<div class="price-amt">${fmt(p)}</div><div class="price-savings">Save ${fmt(savings(c))}</div>`
+    ?`<div class="price-amt">${fmt(p)}</div><div class="price-savings">Save ${fmt(savings(c,s.ft))}</div>`
     :`<div class="price-amt" style="color:var(--warm-gray);font-size:12px">${fmt(c.base*c.min+(c.topup||0))}</div>`;
   updateRH(rId);
 }
@@ -347,14 +347,14 @@ function updateFt(rId,type,v,e){
   state[rId][type].ft=parseFloat(v)||0;
   refreshRow(rId,type);render();
 }
-// Snap footage to a valid whole number within [min, 99] when the field loses focus.
+// Normalise footage within [0, 99] on blur; footage below the discounted minimum is allowed and charged proportionally.
 // Resolves: values below the minimum (which silently charge the full minimum block),
 // empty/zero/negative entries, decimals, and values above the cap.
 function normalizeFt(rId,type,e){
   if(e)e.stopPropagation();
   const c=CATALOGUE[type],s=state[rId][type];
   let n=Math.round(s.ft);
-  if(!n||n<c.min)n=c.min;
+  if(!n||n<0)n=0;
   if(n>99)n=99;
   s.ft=n;
   const inp=document.getElementById('ft-'+uid(rId,type));
@@ -379,7 +379,7 @@ function buildItemRows(rId,items){
       <div class="cb" id="cb-${id}"></div>
       <div><div class="item-name">${c.name}</div><div class="item-spec">First ${c.min}ft discounted · add'l @ $${c.extra}/ft</div>${c.bonus?`<div class="free-gift">${c.bonus}</div>`:''}</div>
       <div class="ft-wrap" onclick="event.stopPropagation()">
-        <input type="number" min="${c.min}" max="99" step="1" value="${c.min}" id="ft-${id}" oninput="updateFt('${rId}','${type}',this.value,event)" onblur="normalizeFt('${rId}','${type}',event)"/>
+        <input type="number" min="0" max="99" step="1" value="${c.min}" id="ft-${id}" oninput="updateFt('${rId}','${type}',this.value,event)" onblur="normalizeFt('${rId}','${type}',event)"/>
         <span>ft</span>
       </div>
       <div class="rate-tags"><div class="rtag launch">$${c.base}/ft · ${c.min}ft</div><br><div class="rtag regular">$${c.extra}/ft · add'l</div></div>
@@ -412,9 +412,9 @@ function render(){
     any=true;html+=`<div class="sum-room"><div class="sum-room-label">${room.label}</div>`;
     ch.forEach(type=>{
       const c=CATALOGUE[type],ft=state[room.id][type].ft,p=calcPrice(c,ft);
-      gt+=p;gs+=savings(c);
+      gt+=p;gs+=savings(c,ft);
       const ov=Math.max(0,ft-c.min);
-      let d=`${c.min}ft @ $${c.base}/ft (launch)`;if(ov>0)d+=` + ${ov}ft @ $${c.extra}/ft`;
+      let d=`${Math.min(ft,c.min)}ft @ $${c.base}/ft (launch)`;if(ov>0)d+=` + ${ov}ft @ $${c.extra}/ft`;
       const gift=c.bonus?`<span class="s-detail" style="color:var(--gold)">★ ${c.bonus}</span>`:'';
       html+=`<div class="summary-line"><span>${c.name} (${ft}ft)<span class="s-detail">${d}</span>${gift}</span><span style="white-space:nowrap">${fmt(p)}</span></div>`;
     });
@@ -488,7 +488,7 @@ function clearSig(){
 function checkSubmit(){
   const hi=ROOMS.some(r=>r.items.some(t=>state[r.id][t].checked));
   // Every checked item must have at least its minimum footage — blocks $0 / sub-minimum line items.
-  const validFt=ROOMS.every(r=>r.items.every(t=>{const s=state[r.id][t];return !s.checked||s.ft>=CATALOGUE[t].min;}));
+  const validFt=ROOMS.every(r=>r.items.every(t=>{const s=state[r.id][t];return !s.checked||s.ft>0;}));
   const hn=document.getElementById('f-name').value.trim().length>0;
   document.getElementById('submit-btn').disabled=!(hi&&validFt&&hasSig&&consented&&hn);
 }
@@ -500,7 +500,7 @@ function buildSummaryData(){
     const ch=room.items.filter(t=>state[room.id][t].checked);if(!ch.length)return;
     const items=ch.map(type=>{
       const c=CATALOGUE[type],ft=state[room.id][type].ft,p=calcPrice(c,ft);
-      gt+=p;gs+=savings(c);
+      gt+=p;gs+=savings(c,ft);
       return{name:c.name,ft:ft,price:p,base:c.base,extra:c.extra,min:c.min,bonus:c.bonus||''};
     });
     rooms.push({label:room.label,items:items});
@@ -536,7 +536,7 @@ function buildPDF(){
       if(y>272){doc.addPage();y=20;}
       doc.setTextColor(28,26,23);doc.setFontSize(10);
       doc.text(it.name+' ('+it.ft+'ft)',L,y);doc.text(fmt(it.price),R,y,{align:'right'});
-      const ov=Math.max(0,it.ft-it.min);let d=it.min+'ft @ $'+it.base+'/ft (launch)';if(ov>0)d+=' + '+ov+'ft @ $'+it.extra+'/ft';
+      const ov=Math.max(0,it.ft-it.min);let d=Math.min(it.ft,it.min)+'ft @ $'+it.base+'/ft (launch)';if(ov>0)d+=' + '+ov+'ft @ $'+it.extra+'/ft';
       doc.setTextColor(140,128,112);doc.setFontSize(7.5);doc.text(d,L,y+4);y+=8;
       if(it.bonus){doc.setTextColor(184,151,90);doc.setFontSize(7.5);doc.text('* '+it.bonus,L,y+1);y+=4;}
       y+=1;
